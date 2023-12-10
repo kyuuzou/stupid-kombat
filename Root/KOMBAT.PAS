@@ -7,18 +7,15 @@ type TSide = (Left, Right);
 type TSprites = array[TSide, TPose, 0..4] of string;
 
 var sprites : TSprites;
+var leftPlayerScreenX : integer;
+var rightPlayerScreenX : integer;
 
-procedure drawFighter (pose : TPose; side : TSide);
-const FighterY : integer = 3;
-var screenX : integer;
+procedure drawFighter(pose : TPose; side : TSide; screenX : integer);
+const FighterScreenY : integer = 3;
 var screenY : integer;
 var spriteY : integer;
-var upperLeftScreenX : integer;
 begin
-    if side = Left then upperLeftScreenX := 1 else upperLeftScreenX := 31;
-
-    screenX := upperLeftScreenX;
-    screenY := FighterY;
+    screenY := FighterScreenY;
     gotoxy(screenX, screenY);
 
     for spriteY := low(sprites[side][pose]) to high(sprites[side][pose]) do
@@ -38,6 +35,9 @@ end;
 
 procedure initialise;
 begin
+    leftPlayerScreenX := 1;
+    rightPlayerScreenX := 31;
+
     sprites[Left][Idle][0]     := '   ÚÄÄ¿   ';
     sprites[Left][Idle][1]     := '  ÄÁÄÄÁÄ  ';
     sprites[Left][Idle][2]     := '  ( §_§)  ';
@@ -77,21 +77,32 @@ begin
 end;
 
 var key : char;
-var pose : TPose;
+var leftPose : TPose;
+var rightPose : TPose;
 begin
     initialise;
 
     repeat
-        pose := Idle;
+        leftPose := Idle;
+        rightPose := Idle;
 
         case (key) of
-            'Q' : pose := Punch;
-            'E' : pose := Kick;
+            'Q' : leftPose := Punch;
+            'E' : leftPose := Kick;
+            'A' : leftPlayerScreenX := leftPlayerScreenX - 1;
+            'D' : leftPlayerScreenX := leftPlayerScreenX + 1;
+            '.' : rightPose := Punch;
+            '-' : rightPose := Kick;
+            chr(0) : { arrow keys return #00 before the actual key code }
+                case upcase(readkey) of
+                    #75 : rightPlayerScreenX := rightPlayerScreenX - 1;
+                    #77 : rightPlayerScreenX := rightPlayerScreenX + 1;
+                end;
         end;
 
         drawHeader;
-        drawFighter(pose, Left);
-        drawFighter(pose, Right);
+        drawFighter(leftPose, Left, leftPlayerScreenX);
+        drawFighter(rightPose, Right, rightPlayerScreenX);
         gotoxy(80, 25); {move cursor to lower right corner}
 
         key := upcase(readkey);
