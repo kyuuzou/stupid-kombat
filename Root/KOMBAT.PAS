@@ -17,6 +17,13 @@ begin
     calculateDistance := rightPlayerScreenX - leftPlayerScreenX - 8;
 end;
 
+procedure playSound(tone : integer);
+begin
+    sound(tone);
+    delay(100);
+    nosound;
+end;
+
 procedure drawFighter(pose : TPose; side : TSide; screenX : integer);
 const FighterScreenY : integer = 5;
 var screenY : integer;
@@ -65,14 +72,26 @@ begin;
         goto return;
 
     if leftPose = Punch then
-        rightPlayerHP := rightPlayerHP - 1
+    begin
+        rightPlayerHP := rightPlayerHP - 1;
+        playSound(1000);
+    end
     else if leftPose = Kick then
+    begin
         rightPlayerHP := rightPlayerHP - 2;
+        playSound(2000);
+    end;
 
     if rightPose = Punch then
-        leftPlayerHP := leftPlayerHP - 1
+    begin
+        leftPlayerHP := leftPlayerHP - 1;
+        playSound(1000);
+    end
     else if rightPose = Kick then
+    begin
         leftPlayerHP := leftPlayerHP - 2;
+        playSound(2000);
+    end;
 
     return:
 end;
@@ -177,6 +196,8 @@ begin
         writeln ('Player 2 wins! FATALITY')
     else
         writeln ('Player 1 wins! FATALITY');
+
+    playSound(500);
 
     repeat
     until readkey = #27;
