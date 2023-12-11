@@ -1,14 +1,15 @@
 program StupidKombat;
 
-uses crt, Player, Types;
-
-const FighterScreenY : integer = 5;
+uses crt, Player;
 
 var players : array[TSide] of TPlayer;
 
 function calculateDistance : integer;
+const SpriteWidth : integer = 8;
+var distance : integer;
 begin
-    calculateDistance := players[Right].GetX - players[Left].GetX - 8;
+    distance := players[Right].GetX - players[Left].GetX - SpriteWidth;
+    calculateDistance := distance;
 end;
 
 procedure playSound(tone: integer);
@@ -84,8 +85,8 @@ end;
 
 procedure initialise;
 begin
-    players[Left].Init(Idle, Left, 1, FighterScreenY);
-    players[Right].Init(Idle, Right, 31, FighterScreenY);
+    players[Left].Init(Idle, Left);
+    players[Right].Init(Idle, Right);
 end;
 
 var key : char;

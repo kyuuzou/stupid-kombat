@@ -2,8 +2,10 @@ unit Player;
 
 interface
 
-uses crt, Types;
+uses crt;
 
+type TPose = (Idle, Punch, Kick);
+type TSide = (Left, Right);
 type TSprites = array[TPose, 0..4] of string;
 
 type TPlayer = object
@@ -16,7 +18,7 @@ type TPlayer = object
         _y : integer;
 
     public
-        constructor Init(pose: TPose; side: TSide; x: integer; y: integer);
+        constructor Init(pose: TPose; side: TSide);
         destructor Destroy;
 
         procedure Damage(amount : integer);
@@ -25,23 +27,23 @@ type TPlayer = object
         function GetPose : TPose;
         function GetSide : TSide;
         function GetX : integer;
-        function GetY : integer;
         procedure InitSprites;
         procedure SetPose(pose : TPose);
         procedure SetX(x : integer);
-        procedure SetY(y : integer);
 end;
 
 implementation
 
-constructor TPlayer.Init(pose: TPose; side: TSide; x: integer; y: integer);
+constructor TPlayer.Init(pose: TPose; side: TSide);
 const InitialHP : integer = 20;
+const InitialX : array[TSide] of integer = (2, 33);
+const InitialY : integer = 5;
 begin
     _hp := InitialHP;
     _pose := pose;
     _side := side;
-    _x := x;
-    _y := y;
+    _x := InitialX[side];
+    _y := InitialY;
 
     InitSprites;
 end;
@@ -60,7 +62,7 @@ var screenY : integer;
 var spriteY : integer;
 begin
     screenY := _y;
-    gotoxy(_x, _y);
+    gotoxy(_x, screenY);
 
     for spriteY := low(_sprites[_pose]) to high(_sprites[_pose]) do
     begin
@@ -90,11 +92,6 @@ begin
     GetX := _x;
 end;
 
-function TPlayer.GetY : integer;
-begin
-    GetY := _y;
-end;
-
 procedure TPlayer.InitSprites;
 const SpriteHeight : integer = 5;
 const SideNames : array[TSide] of string = ('LEFT', 'RIGHT');
@@ -116,7 +113,6 @@ begin
     end;
 
     Close(textFile);
-    readkey;
 end;
 
 procedure TPlayer.SetPose(pose : TPose);
@@ -127,11 +123,6 @@ end;
 procedure TPlayer.SetX(x : integer);
 begin
     _x := x;
-end;
-
-procedure TPlayer.SetY(y : integer);
-begin
-    _y := y;
 end;
 
 end.
