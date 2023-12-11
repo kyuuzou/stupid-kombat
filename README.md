@@ -11,41 +11,27 @@
   <img alt="GitHub last commit" src ="https://img.shields.io/github/last-commit/kyuuzou/stupid-kombat" />
 </p>
 <p align="center">
-  <a href="https://www.codacy.com/gh/kyuuzou/stupid-kombat/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=kyuuzou/stupid-kombat&amp;utm_campaign=Badge_Grade"><img src="https://app.codacy.com/project/badge/Grade/0e148b21eaa742448a210882d88a9f0c"/></a>
-  <a href="https://unity3d.com/get-unity/download/archive" target="_blank"><img src="https://img.shields.io/badge/Unity-2021.3-blue" /></a>
+  <a href="https://app.codacy.com/gh/kyuuzou/stupid-kombat/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade"><img src="https://app.codacy.com/project/badge/Grade/602a75c3474c4eafa50899ebd91293c0"/></a>
+  <a href="https://web.archive.org/web/19980423115536/http://www.borland.com/pascal/tp7fact.html" target="_blank"><img src="https://img.shields.io/badge/Turbo_Pascal-7.0-orange" /></a>
   <a href="https://github.com/kyuuzou/stupid-kombat/blob/master/LICENSE" target="_blank">
     <img alt="License: MIT" src="https://img.shields.io/badge/License-MIT-blue.svg" />
   </a>
 </p>
 
 ## Description
-A template for README.md files.
+Around 1990, my brother created a Mortal Kombat parody in Turbo Pascal, dubbed "Stupid Kombat". In 2023, in what I consider the best use of my accumulated experience over three decades of game development, I remade it.
 
 ## Gameplay Video
 
 [![Gameplay Video](https://github.com/kyuuzou/stupid-kombat/blob/main/Documentation/thumbnail.png)](https://youtu.be/D1qnIjfa9c0 "Gameplay Video")
 
-## Usage
-1. Find/replace `stupid-kombat` with the name of the project.
-2. Replace the icon with something thematically appropriate.
-3. Create a Codacy project and copy the generated URL to the badge.
-4. Update the Unity version badge.
-5. Fill out the `Why it Exists`, `Version History` and `Acknowledgements` sections, or remove them if not applicable.
-6. Update the copyright year.
-7. Replace Documentation/preview.gif with a short preview of the project.
-
-## Why it Exists
-
-_Placeholder: short explanation_. The intention of this project is as follows:  
-
-- [x] Step 1
-- [ ] Step 2
-
-
 ## Version History
 
-* *0.0.1*
-    * _Placeholder: description_
+* *1.0.0*
+    * Players can side-step, punch and kick.
+    * Attacks have sound.
+    * Health and victory is possible.
+    * All functionality from the original game is implemented.
 
 ## Contacting the Author
 
@@ -60,4 +46,4 @@ Copyright © 2023 [Nelson Rodrigues](https://github.com/kyuuzou).<br />
 This project is licensed under the [MIT License](https://opensource.org/licenses/MIT).
 
 ## Acknowledgments
-_Placeholder: acknowledgments_
+Thank you to Nuno Rodrigues, my brother, whose early exploits in game development resulted in my own interest in the area, and the remake of this masterpiece 30 years later.
