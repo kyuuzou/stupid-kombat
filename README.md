@@ -26,6 +26,10 @@ Around 1990, my brother created a Mortal Kombat parody in Turbo Pascal, dubbed "
 
 ## Version History
 
+* *1.0.1*
+    * Player now has its own unit.
+    * Sprites are separated from code.
+
 * *1.0.0*
     * Players can side-step, punch and kick.
     * Attacks have sound.
