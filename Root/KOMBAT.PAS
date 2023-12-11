@@ -4,7 +4,6 @@ uses crt, Player, Types;
 
 const FighterScreenY : integer = 5;
 
-var sprites : TSprites;
 var players : array[TSide] of TPlayer;
 
 function calculateDistance : integer;
@@ -17,21 +16,6 @@ begin
     sound(tone);
     delay(100);
     nosound;
-end;
-
-procedure drawFighter(player: TPlayer);
-var screenY : integer;
-var spriteY : integer;
-begin
-    screenY := player.GetY;
-    gotoxy(player.GetX, screenY);
-
-    for spriteY := low(sprites[player.GetSide][player.GetPose]) to high(sprites[player.GetSide][player.GetPose]) do
-    begin
-         writeln(sprites[player.GetSide][player.GetPose][spriteY]);
-         screenY := screenY + 1;
-         gotoxy(player.GetX, screenY);
-    end;
 end;
 
 procedure drawGameOver;
@@ -102,43 +86,6 @@ procedure initialise;
 begin
     players[Left].Init(Idle, Left, 1, FighterScreenY);
     players[Right].Init(Idle, Right, 31, FighterScreenY);
-
-    sprites[Left][Idle][0]     := '   здд©  ';
-    sprites[Left][Idle][1]     := '  даддад ';
-    sprites[Left][Idle][2]     := '  ( ╖_╖) ';
-    sprites[Left][Idle][3]     := '   ( 9 )9';
-    sprites[Left][Idle][4]     := '   /   \ ';
-
-    sprites[Left][Punch][0]    := '  здд©   ';
-    sprites[Left][Punch][1]    := ' даддад  ';
-    sprites[Left][Punch][2]    := ' ( ╖_╖)  ';
-    sprites[Left][Punch][3]    := '  ( 9 )-@';
-    sprites[Left][Punch][4]    := '  /   \  ';
-
-    sprites[Left][Kick][0]     := '  здд©   ';
-    sprites[Left][Kick][1]     := ' даддад  ';
-    sprites[Left][Kick][2]     := ' ( ╖_╖)  ';
-    sprites[Left][Kick][3]     := '  ( 9 )9 ';
-    sprites[Left][Kick][4]     := '  /   ННН';
-
-    sprites[Right][Idle][0]    := '  здд©   ';
-    sprites[Right][Idle][1]    := ' даддад  ';
-    sprites[Right][Idle][2]    := ' (╖_╖ )  ';
-    sprites[Right][Idle][3]    := '@( @ )   ';
-    sprites[Right][Idle][4]    := ' /   \   ';
-
-    sprites[Right][Punch][0]   := '   здд©  ';
-    sprites[Right][Punch][1]   := '  даддад ';
-    sprites[Right][Punch][2]   := '  (╖_╖ ) ';
-    sprites[Right][Punch][3]   := '@-( @ )  ';
-    sprites[Right][Punch][4]   := '  /   \  ';
-
-    sprites[Right][Kick][0]    := '   здд©  ';
-    sprites[Right][Kick][1]    := '  даддад ';
-    sprites[Right][Kick][2]    := '  (╖_╖ ) ';
-    sprites[Right][Kick][3]    := ' @( @ )  ';
-    sprites[Right][Kick][4]    := 'ННН   \  ';
-
 end;
 
 var key : char;
@@ -171,8 +118,8 @@ begin
         end;
 
         drawHeader;
-        drawFighter(players[Left]);
-        drawFighter(players[Right]);
+        players[Left].Draw;
+        players[Right].Draw;
 
         handleDamage(Left);
         handleDamage(Right);
