@@ -1,3 +1,4 @@
 
-Root/KOMBAT.BAK
-Root/KOMBAT.EXE
+*.BAK
+*.EXE
+*.TPU

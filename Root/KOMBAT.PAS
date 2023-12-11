@@ -1,43 +1,53 @@
 program StupidKombat;
 
-uses crt;
+uses crt, Player, Types;
 
-type TPose = (Idle, Punch, Kick);
-type TSide = (Left, Right);
-type TSprites = array[TSide, TPose, 0..4] of string;
+const FighterScreenY : integer = 5;
 
 var sprites : TSprites;
-var leftPlayerScreenX : integer;
-var rightPlayerScreenX : integer;
-var leftPlayerHP : integer;
-var rightPlayerHP : integer;
+var players : array[TSide] of TPlayer;
 
 function calculateDistance : integer;
 begin
-    calculateDistance := rightPlayerScreenX - leftPlayerScreenX - 8;
+    calculateDistance := players[Right].GetX - players[Left].GetX - 8;
 end;
 
-procedure playSound(tone : integer);
+procedure playSound(tone: integer);
 begin
     sound(tone);
     delay(100);
     nosound;
 end;
 
-procedure drawFighter(pose : TPose; side : TSide; screenX : integer);
-const FighterScreenY : integer = 5;
+procedure drawFighter(player: TPlayer);
 var screenY : integer;
 var spriteY : integer;
 begin
-    screenY := FighterScreenY;
-    gotoxy(screenX, screenY);
+    screenY := player.GetY;
+    gotoxy(player.GetX, screenY);
 
-    for spriteY := low(sprites[side][pose]) to high(sprites[side][pose]) do
+    for spriteY := low(sprites[player.GetSide][player.GetPose]) to high(sprites[player.GetSide][player.GetPose]) do
     begin
-         writeln(sprites[side][pose][spriteY]);
+         writeln(sprites[player.GetSide][player.GetPose][spriteY]);
          screenY := screenY + 1;
-         gotoxy(screenX, screenY);
+         gotoxy(player.GetX, screenY);
     end;
+end;
+
+procedure drawGameOver;
+begin
+    gotoxy(10, 11);
+
+    if (players[Left].GetHP <= 0) and (players[Right].GetHP <= 0) then
+        writeln ('DRAW!')
+    else if players[Left].GetHP <= 0 then
+        writeln ('Player 2 wins! FATALITY')
+    else if players[Right].GetHP <= 0 then
+        writeln ('Player 1 wins! FATALITY')
+    else
+        writeln ('Goodbye!');
+
+    playSound(500);
 end;
 
 procedure drawHeader;
@@ -53,43 +63,35 @@ var i : integer;
 begin
     gotoxy(1, HealthBarY);
 
-    for i := 1 to leftPlayerHP do
+    for i := 1 to players[Left].GetHP do
         write('ш');
 
-    gotoxy(22 + (20 - rightPlayerHP), HealthBarY);
+    gotoxy(22 + (20 - players[Right].GetHP), HealthBarY);
 
-    for i := 1 to rightPlayerHP do
+    for i := 1 to players[Right].GetHP do
         write('ш');
 end;
 
-procedure handleDamage(leftPose : TPose; rightPose : TPose);
+procedure handleDamage(side: TSide);
 label return;
 var distance : integer;
+var opponentSide : TSide;
 begin;
     distance := calculateDistance;
 
-    if distance > 1 then
+    if distance > 0 then
         goto return;
 
-    if leftPose = Punch then
-    begin
-        rightPlayerHP := rightPlayerHP - 1;
-        playSound(1000);
-    end
-    else if leftPose = Kick then
-    begin
-        rightPlayerHP := rightPlayerHP - 2;
-        playSound(2000);
-    end;
+    if (side = Right) then opponentSide := Left else opponentSide := Right;
 
-    if rightPose = Punch then
+    if players[side].GetPose = Punch then
     begin
-        leftPlayerHP := leftPlayerHP - 1;
+        players[opponentSide].Damage(1);
         playSound(1000);
     end
-    else if rightPose = Kick then
+    else if players[side].GetPose = Kick then
     begin
-        leftPlayerHP := leftPlayerHP - 2;
+        players[opponentSide].Damage(2);
         playSound(2000);
     end;
 
@@ -98,11 +100,8 @@ end;
 
 procedure initialise;
 begin
-    leftPlayerScreenX := 1;
-    rightPlayerScreenX := 31;
-
-    leftPlayerHP := 20;
-    rightPlayerHP := 20;
+    players[Left].Init(Idle, Left, 1, FighterScreenY);
+    players[Right].Init(Idle, Right, 31, FighterScreenY);
 
     sprites[Left][Idle][0]     := '   здд©  ';
     sprites[Left][Idle][1]     := '  даддад ';
@@ -143,8 +142,6 @@ begin
 end;
 
 var key : char;
-var leftPose : TPose;
-var rightPose : TPose;
 label gameover;
 begin
     initialise;
@@ -152,35 +149,36 @@ begin
     key := #01; { initialise with non-#00 for the first iteration of repeat }
 
     repeat
-        leftPose := Idle;
-        rightPose := Idle;
+        players[Left].SetPose(Idle);
+        players[Right].SetPose(Idle);
 
         case (key) of
-            'Q' : leftPose := Punch;
-            'E' : leftPose := Kick;
-            'A' : if leftPlayerScreenX > 1 then
-                      leftPlayerScreenX := leftPlayerScreenX - 1;
+            'Q' : players[Left].SetPose(Punch);
+            'E' : players[Left].SetPose(Kick);
+            'A' : if players[Left].GetX > 1 then
+                      players[Left].SetX(players[Left].GetX - 1);
             'D' : if calculateDistance > 0 then
-                      leftPlayerScreenX := leftPlayerScreenX + 1;
-            '.' : rightPose := Punch;
-            '-' : rightPose := Kick;
+                      players[Left].SetX(players[Left].GetX + 1);
+            '.' : players[Right].SetPose(Punch);
+            '-' : players[Right].SetPose(Kick);
             #00 : { arrow keys return #00 before the actual key code }
                 case upcase(readkey) of
                     #75 : if calculateDistance > 0 then
-                              rightPlayerScreenX := rightPlayerScreenX - 1;
-                    #77 : if rightPlayerScreenX < 72 then
-                              rightPlayerScreenX := rightPlayerScreenX + 1;
+                              players[Right].SetX(players[Right].GetX - 1);
+                    #77 : if players[Right].GetX < 72 then
+                              players[Right].SetX(players[Right].GetX + 1);
                 end;
         end;
 
         drawHeader;
-        drawFighter(leftPose, Left, leftPlayerScreenX);
-        drawFighter(rightPose, Right, rightPlayerScreenX);
+        drawFighter(players[Left]);
+        drawFighter(players[Right]);
 
-        handleDamage(leftPose, rightPose);
+        handleDamage(Left);
+        handleDamage(Right);
         drawHealth;
 
-        if (leftPlayerHP <= 0) or (rightPlayerHP <= 0) then
+        if (players[Left].GetHP <= 0) or (players[Right].GetHP <= 0) then
             goto gameover;
 
         gotoxy(80, 25); {move cursor to lower right corner}
@@ -188,16 +186,7 @@ begin
     until key = #27; {Escape}
 
     gameover:
-    gotoxy(10, 11);
-
-    if (leftPlayerHP <= 0) and (rightPlayerHP <= 0) then
-        writeln ('DRAW!')
-    else if leftPlayerHP <= 0 then
-        writeln ('Player 2 wins! FATALITY')
-    else
-        writeln ('Player 1 wins! FATALITY');
-
-    playSound(500);
+    drawGameOver;
 
     repeat
     until readkey = #27;
