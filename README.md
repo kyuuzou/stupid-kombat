@@ -11,7 +11,6 @@
   <img alt="GitHub last commit" src ="https://img.shields.io/github/last-commit/kyuuzou/stupid-kombat" />
 </p>
 <p align="center">
-  <a href="https://app.codacy.com/gh/kyuuzou/stupid-kombat/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade"><img src="https://app.codacy.com/project/badge/Grade/602a75c3474c4eafa50899ebd91293c0"/></a>
   <a href="https://web.archive.org/web/19980423115536/http://www.borland.com/pascal/tp7fact.html" target="_blank"><img src="https://img.shields.io/badge/Turbo_Pascal-7.0-orange" /></a>
   <a href="https://github.com/kyuuzou/stupid-kombat/blob/master/LICENSE" target="_blank">
     <img alt="License: MIT" src="https://img.shields.io/badge/License-MIT-blue.svg" />
